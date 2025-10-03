@@ -34,10 +34,10 @@ Embedded AuthZ offers some advantages for typical use-cases:
 In a ReBAC system like EACL, _Subjects_ & _Resources_ are related via _Relationships_.
 
 A `Relationship` is just a 3-tuple of `[subject relation resource]`, e.g.
-- `[user1 :owner account1]` means subject `user1` is the `:owner` of resource `account1`,
-- whereas `[account1 :account product1]` means subject `account1` is the `:account` for resource `product1`.
+- `[user1 :owner account1]` means subject `user1` is the `:owner` of resource `account1`, and
+- `[account1 :account product1]` means subject `account1` is the `:account` for resource `product1`.
 
-To create a relationship, defined a potential `Relation`, like so:
+To create a relationship, define a potential `Relation`, like so:
 
 ```clojure
 ; Account Resource:
@@ -69,7 +69,7 @@ The `IAuthorization` protocol in [src/eacl/core.clj](src/eacl/core.clj) defines 
 - `(eacl/can? client subject permission resource) => true | false`
 - `(eacl/lookup-subjects client filters) => {:data [subjects...], cursor 'next-cursor}`
 - `(eacl/lookup-resources client filters) => {:data [resources...], :cursor 'next-cursor}`.
-- `(eacl/count-resources client filters) => <count>` materializes full index, so can be slow. Use sparingly.
+- `(eacl/count-resources client filters) => {:keys [count limit cursor]}` supports limit & cursor for iterated counting. Use sparingly with `:limit -1` for all results.
 - `(eacl/read-relationships client filters) => [relationships...]`
 - `(eacl/write-relationships! client updates) => {:zed/token 'db-basis}`,
   - where `updates` is just a coll of `[operation relationship]` where `operation` is one of `:create`, `:touch` or `:delete`.
